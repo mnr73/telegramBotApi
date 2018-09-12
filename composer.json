@@ -1,0 +1,17 @@
+{
+    "name": "miladnazari/telegram-bot-api",
+    "description": "simple package for telegram bot api",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "milad nazari robati",
+            "email": "mnrmilad@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "miladnazari\\telegramBotApi\\": "src"
+        }
+    },
+    "require": {}
+}
