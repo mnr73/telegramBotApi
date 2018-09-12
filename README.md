@@ -4,4 +4,6 @@
 
 install with composer
 
-### composer require miladnazari/telegram-bot-api
+```
+composer require miladnazari/telegram-bot-api
+```
