@@ -1,6 +1,6 @@
 # telegramBotApi
 
-## simple telegram bot API with multiple bot support
+## simple telegram bot API with multiple bot support for php
 
 install with composer
 
