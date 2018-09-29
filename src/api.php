@@ -220,7 +220,7 @@ class api{
         }
         elseif(isset($msg->animation))
         {
-            $res->type = 'gif';
+            $res->type = 'Animation';
             $res->fid = $msg->animation->file_id;
         }
         elseif(isset($msg->game))
