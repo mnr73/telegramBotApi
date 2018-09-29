@@ -1,7 +1,6 @@
 <?php
 namespace miladnazari\telegramBotApi;
 
-
 class api{
 
     /*
@@ -25,10 +24,6 @@ class api{
     */
     protected $update;
     /*
-    * $replay -> defult replay markup
-    */
-    protected $replay = [];
-    /*
     * $error -> error messages
     */
     protected $error = "telegram bot api log\n";
@@ -50,82 +45,46 @@ class api{
     /*
     * change token -> this good for multi bot manage
     */
-    public function changeToken($token){
+    public function changeToken(string $token){
         $this->token = $token;
         return $this;
     }
     /*
     * chage get result option
     */
-    public function getres($getres){
-        if(is_bool($getres))
-            $this->getres = $getres;
-        else{
-            $this->error = "--- getres for response must be bool\n";
-            return $this->error;
-        }
+    public function getres(bool $getres){
+        $this->getres = $getres;
         return $this;
     }
     /*
     * chage connection time out option
     */
-    public function conSec($conSec){
-        if(is_numeric($conSec))
-            $this->conSec = $conSec;
-        else{
-            $this->error = "--- connection secend must be int\n";
-            return $this->error;
-        }
+    public function conSec(int $conSec){
+        $this->conSec = $conSec;
         return $this;
     }
     /*
     * chage response time out option
     */
-    public function resSec($resSec){
-        if(is_numeric($resSec))
-            $this->resSec = $resSec;
-        else{
-            $this->error = "--- responce secend must be int\n";
-            return $this->error;
-        }
+    public function resSec(int $resSec){
+        $this->resSec = $resSec;
         return $this;
     }
     /*
     * set action -> method of telegram api
     */
-    public function action($action){
-        if(is_string($action))
-            $this->action = $action;
-        else{
-            $this->error = "--- method must be string\n";
-            return $this->error;
-        }
+    public function action(string $action){
+        $this->action = $action;
         return $this;
     }
     /*
     * set parameters of telegram api
     */
-    public function param($param){
-        if(is_array($param)){
-            if(isset($param['reply_markup'])){
-                $param['reply_markup'] = json_encode($param['reply_markup']);
-            }elseif(!empty($this->replay)){
-                $param['reply_markup'] = json_encode($this->replay);
-            }
-            $this->param = $param;
+    public function param(array $param){
+        if(isset($param['reply_markup'])){
+            $param['reply_markup'] = json_encode($param['reply_markup']);
         }
-        else{
-            $this->error = "--- parameter must be array\n";
-            return $this->error;
-        }
-        return $this;
-    }
-    /*
-    * set defult replay markup
-    */
-    public function setReplay($keys){
-        if($keys === false) $this->replay = [];
-        elseif(is_array($keys)) $this->replay = $keys;
+        $this->param = $param;
         return $this;
     }
     /*
@@ -181,6 +140,22 @@ class api{
         return $this->update;
     }
     /*
+    * get updates type
+    */
+    public function getUpdateType(){
+        $array = $this->getUpdate();
+        reset($array);
+        next($array);
+        return key($array);
+    }
+    /*
+    * get chat type
+    * $msg = Message type
+    */
+    public function getChatType($msg){
+        return $msg->chat->type;
+    }
+    /*
     * get text or caption
     * $msg = Message type
     */
@@ -192,6 +167,13 @@ class api{
         }else{
             return "";
         }
+    }
+    /*
+    * get fullname
+    * $user = User type
+    */
+    public function fullname($user){
+        return $user->first_name.(isset($user->last_name)?" ".$user->last_name:"");
     }
     /*
     * get type and file id
@@ -236,27 +218,10 @@ class api{
             $res->type = 'video_note';
             $res->fid = $msg->video_note->file_id;
         }
-        elseif(isset($doc->mime_type))
+        elseif(isset($msg->animation))
         {
-            $mtpart = explode('/',$doc->mime_type);
-            if( $doc->mime_type == 'video/mp4' && @$doc->thumb->width < 100 )
-            {
-                $res->doctype = 'gif';
-            }
-            elseif($mtpart[0] == 'video') 
-            {
-                $res->doctype = 'video';
-            }
-            elseif($mtpart[0] == 'image') 
-            {
-                $res->doctype = 'photo';
-            }
-            elseif($mtpart[0] == 'application' && $mtpart[1] == 'vnd.android.package-archive') 
-            {
-                $res->doctype = 'apk';
-            }
-            $res->type = 'document';
-            $res->fid = $msg->document->file_id;
+            $res->type = 'gif';
+            $res->fid = $msg->animation->file_id;
         }
         elseif(isset($msg->game))
         {
@@ -272,6 +237,26 @@ class api{
         {
             $res->type = 'location';
             $res->fid = $msg->location->longitude.'-'.$msg->location->latitude;
+        }
+        elseif(isset($doc))
+        {
+            if(isset($doc->mime_type)){
+                $mtpart = explode('/',$doc->mime_type);
+                if($mtpart[0] == 'video') 
+                {
+                    $res->doctype = 'video';
+                }
+                elseif($mtpart[0] == 'image') 
+                {
+                    $res->doctype = 'photo';
+                }
+                elseif($mtpart[0] == 'application' && $mtpart[1] == 'vnd.android.package-archive') 
+                {
+                    $res->doctype = 'apk';
+                }
+            }
+            $res->type = 'document';
+            $res->fid = $msg->document->file_id;
         }
         
         return $res;
