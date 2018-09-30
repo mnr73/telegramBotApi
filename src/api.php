@@ -140,6 +140,31 @@ class api{
         return $this->update;
     }
     /*
+    * get updates message
+    */
+    public function &getMsg(){
+        $type = $this->getUpdateType();
+        if(in_array($type,['message','edited_message','channel_post','edited_channel_post'])){
+            return $this->update->$type;
+        }elseif($type == 'callback_query'){
+            return $this->update->callback_query->message;
+        }else{
+            return false;
+        }
+    }
+    /*
+    * is a replay message
+    */
+    public function isRep($msg){
+        return isset($msg->reply_to_message)?true:false;
+    }
+    /*
+    * get replay message
+    */
+    public function getRep($msg){
+        return $msg->reply_to_message;
+    }
+    /*
     * get updates type
     */
     public function getUpdateType(){
