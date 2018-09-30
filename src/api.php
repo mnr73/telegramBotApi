@@ -2,7 +2,7 @@
 namespace miladnazari\telegramBotApi;
 
 class api{
-
+    /*version 1.2*/
     /*
     * $token -> bot token --- string
     * $getres -> get response --- bool - true or false
