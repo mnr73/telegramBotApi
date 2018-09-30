@@ -22,7 +22,7 @@ class api{
     /*
     * $update -> get update in std class
     */
-    protected $update;
+    public $update;
     /*
     * $error -> error messages
     */
