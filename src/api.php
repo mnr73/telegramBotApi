@@ -26,7 +26,7 @@ class api{
     /*
     * $error -> error messages
     */
-    protected $error = "telegram bot api log\n";
+    protected $error;
     
     public function __construct($token = false, $getres = true, $conSec = 10, $resSec = 50){
         $this->token = $token;
@@ -36,10 +36,12 @@ class api{
     }
     
     function __destruct() {
-        if(class_exists('\Log')){
-            \Log::debug($this->error);
-        }else{
-            error_log($this->error);
+        if(!empty($this->error)){
+            if(class_exists('\Log')){
+                \Log::debug($this->error);
+            }else{
+                error_log($this->error);
+            }
         }
     }
     /*
@@ -105,7 +107,7 @@ class api{
         $res = curl_exec($ch);
         curl_close($ch);
         if($res === false){
-            $this->error = "--- shoot problem -> $url\n";
+            $this->error = "---tel api--- shoot problem -> $url\n";
             http_response_code(500);
             return $this->error;
         }elseif($getres){
