@@ -108,7 +108,10 @@ class api{
         if($res === false){
             $this->error = "---tel api--- shoot problem -> $url\n";
             http_response_code(500);
-            return $this->error;
+            $res = new \stdClass();
+            $res->ok = false;
+            $res->msg = $this->error;
+            return $res;
         }elseif($getres){
             return json_decode($res);
         }else{
