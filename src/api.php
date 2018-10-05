@@ -206,7 +206,7 @@ class api{
     * $msg = Message type
     */
     public function typeOf($msg){
-        $res = new stdClass();
+        $res = new \stdClass();
         $doc = &$msg->document;
         if(isset($msg->text)){
             $res->type = 'text';
