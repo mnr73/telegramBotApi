@@ -2,7 +2,6 @@
 namespace miladnazari\telegramBotApi;
 
 class api{
-    /*version 1.2*/
     /*
     * $token -> bot token --- string
     * $getres -> get response --- bool - true or false
@@ -144,7 +143,7 @@ class api{
     /*
     * get updates message
     */
-    public function &getMsg(){
+    public function getMsg(){
         $type = $this->getUpdateType();
         if(in_array($type,['message','edited_message','channel_post','edited_channel_post'])){
             return $this->update->$type;
