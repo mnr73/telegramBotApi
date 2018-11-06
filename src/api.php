@@ -106,11 +106,10 @@ class api{
         $res = curl_exec($ch);
         curl_close($ch);
         if($res === false){
-            $this->error = "---tel api--- shoot problem -> $url\n";
             http_response_code(500);
             $res = new \stdClass();
             $res->ok = false;
-            $res->msg = $this->error;
+            $res->msg = "---tel api--- shoot problem -> $url\n";
             return $res;
         }elseif($getres){
             return json_decode($res);
